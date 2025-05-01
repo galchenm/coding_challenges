@@ -103,3 +103,55 @@ class Solution:
                 return False
         return True
     
+"""
+Example 4: 560. Subarray Sum Equals K
+
+Given an integer array nums and an integer k, find 
+the number of subarrays whose sum is equal to k.
+"""
+
+from collections import defaultdict
+
+class Solution:
+    def subarraySum(self, nums: List[int], k: int) -> int:
+        """
+        We use curr to track the prefix sum.
+        At any index i, the sum up to i is curr. If there is an index j whose prefix is curr - k, then the sum of the subarray with elements from j + 1 to i is curr - (curr - k) = k.
+        Because the array can have negative numbers, the same prefix can occur multiple times. We use a hash map counts to track how many times a prefix has occurred.
+        At every index i, the frequency of curr - k is equal to the number of subarrays whose sum is equal to k that end at i. Add it to the answer.
+        """
+        counts = defaultdict(int)
+        counts[0] = 1
+        ans = curr = 0
+
+        for num in nums:
+            curr += num
+            ans += counts[curr - k]
+            counts[curr] += 1
+    
+        return ans
+    
+"""
+Example 5: 1248. Count Number of Nice Subarrays
+
+Given an array of positive integers nums and an integer k. 
+Find the number of subarrays with exactly k odd numbers in them.
+
+For example, given nums = [1, 1, 2, 1, 1], k = 3, the answer is 2. 
+The subarrays with 3 odd numbers in them are [1, 1, 2, 1, 1] and [1, 1, 2, 1, 1].
+"""
+
+from collections import defaultdict
+
+class Solution:
+    def numberOfSubarrays(self, nums: List[int], k: int) -> int:
+        counts = defaultdict(int)
+        counts[0] = 1
+        ans = curr = 0
+        
+        for num in nums:
+            curr += num % 2
+            ans += counts[curr - k]
+            counts[curr] += 1
+
+        return ans
